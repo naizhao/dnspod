@@ -59,8 +59,9 @@ func (p *Provider) SetRecords(ctx context.Context, zone string, records []libdns
 	var setRecords []libdns.Record
 
 	for _, record := range records {
-		// TODO: if there is no ID, look up the Name, and fill it in, or call
-		//       newRecord, err := p.addDNSEntry(ctx, zone, record)
+		// Without an ID (ID-carrying records get normalized away by certmagic,
+		// see findRecordID) updateDNSEntry looks the record up by
+		// name+type+value and creates it when missing.
 		setRecord, err := p.updateDNSEntry(ctx, zone, record)
 		if err != nil {
 			return setRecords, err
